@@ -6,7 +6,10 @@ import {
   BookOpen, 
   LogOut,
   Menu,
-  X
+  X,
+  MessageSquare,
+  Crown,
+  Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,6 +29,21 @@ const navigation = [
     name: "Customization",
     href: "/customization",
     icon: Palette,
+  },
+  {
+    name: "Integrations",
+    href: "/integrations",
+    icon: MessageSquare,
+  },
+  {
+    name: "Plans",
+    href: "/plans",
+    icon: Crown,
+  },
+  {
+    name: "User Management",
+    href: "/user-management",
+    icon: Users,
   },
   {
     name: "Knowledge Base",

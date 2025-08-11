@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customization from "./pages/Customization";
+import Integrations from "./pages/Integrations";
+import Plans from "./pages/Plans";
+import UserManagement from "./pages/UserManagement";
 import KnowledgeBase from "./pages/KnowledgeBase";
 import { Layout } from "./components/layout/Layout";
 import NotFound from "./pages/NotFound";
@@ -24,6 +27,9 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/customization" element={<Customization />} />
+            <Route path="/integrations" element={<Integrations />} />
+            <Route path="/plans" element={<Plans />} />
+            <Route path="/user-management" element={<UserManagement />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

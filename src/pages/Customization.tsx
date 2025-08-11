@@ -200,8 +200,88 @@ const Customization = () => {
           </Button>
         </div>
 
-        {/* Live Preview */}
+        {/* Widget Script Section */}
         <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Widget Embed Script</CardTitle>
+              <CardDescription>Copy and paste this script into your website to embed the chat widget</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-muted p-4 rounded-lg">
+                <code className="text-sm break-all">
+                  {`<!-- AI Customer Portal Widget -->
+<script>
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://cdn.aicustomerportal.com/widget.js';
+    script.async = true;
+    script.onload = function() {
+      AIChatWidget.init({
+        widgetId: '${Math.random().toString(36).substr(2, 9)}',
+        primaryColor: '${widgetConfig.primaryColor}',
+        fontFamily: '${widgetConfig.fontFamily}',
+        welcomeMessage: '${widgetConfig.welcomeMessage.replace(/'/g, "\\'")}',
+        position: 'bottom-right'
+      });
+    };
+    document.head.appendChild(script);
+  })();
+</script>
+<!-- End AI Customer Portal Widget -->`}
+                </code>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`<!-- AI Customer Portal Widget -->
+<script>
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://cdn.aicustomerportal.com/widget.js';
+    script.async = true;
+    script.onload = function() {
+      AIChatWidget.init({
+        widgetId: '${Math.random().toString(36).substr(2, 9)}',
+        primaryColor: '${widgetConfig.primaryColor}',
+        fontFamily: '${widgetConfig.fontFamily}',
+        welcomeMessage: '${widgetConfig.welcomeMessage.replace(/'/g, "\\'")}',
+        position: 'bottom-right'
+      });
+    };
+    document.head.appendChild(script);
+  })();
+</script>
+<!-- End AI Customer Portal Widget -->`);
+                    toast({
+                      title: "Script copied!",
+                      description: "The widget script has been copied to your clipboard.",
+                    });
+                  }}
+                >
+                  Copy Script
+                </Button>
+                <Button variant="outline">
+                  View Documentation
+                </Button>
+              </div>
+
+              <div className="bg-blue-50 text-blue-700 p-3 rounded-lg text-sm">
+                <p className="font-medium mb-1">Installation Instructions:</p>
+                <ol className="list-decimal list-inside space-y-1 text-xs">
+                  <li>Copy the script above</li>
+                  <li>Paste it before the closing &lt;/body&gt; tag on your website</li>
+                  <li>The widget will automatically appear on your site</li>
+                  <li>Customize the appearance using the options on the left</li>
+                </ol>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Live Preview */}
           <Card>
             <CardHeader>
               <CardTitle>Live Preview</CardTitle>

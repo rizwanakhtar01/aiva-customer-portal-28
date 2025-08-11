@@ -23,26 +23,41 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState("30d");
   const [customDate, setCustomDate] = useState<Date>();
 
+  // Mock function to generate metrics based on date range
+  const getMetricsForDateRange = (range: string) => {
+    const baseMetrics = {
+      "1d": { users: 347, interactions: 1245, resolution: 96.1, escalation: 3.9, responseTime: 0.8, duration: "2m 45s" },
+      "7d": { users: 1423, interactions: 7834, resolution: 95.3, escalation: 4.7, responseTime: 1.0, duration: "3m 12s" },
+      "30d": { users: 2847, interactions: 18459, resolution: 94.2, escalation: 5.8, responseTime: 1.2, duration: "4m 32s" },
+      "90d": { users: 8456, interactions: 52367, resolution: 93.8, escalation: 6.2, responseTime: 1.4, duration: "5m 18s" },
+      "custom": { users: 2847, interactions: 18459, resolution: 94.2, escalation: 5.8, responseTime: 1.2, duration: "4m 32s" }
+    };
+
+    return baseMetrics[range as keyof typeof baseMetrics] || baseMetrics["30d"];
+  };
+
+  const currentMetrics = getMetricsForDateRange(dateRange);
+
   const metrics = [
     {
       title: "Unique Users",
-      value: "2,847",
+      value: currentMetrics.users.toLocaleString(),
       change: "+12.5%",
       trend: "up" as const,
       icon: Users,
-      description: "Last 30 days"
+      description: `${dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'}`
     },
     {
       title: "Total Interactions",
-      value: "18,459",
+      value: currentMetrics.interactions.toLocaleString(),
       change: "+8.2%",
       trend: "up" as const,
       icon: MessageSquare,
-      description: "This month"
+      description: `${dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'This month' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'}`
     },
     {
       title: "Resolution Rate",
-      value: "94.2%",
+      value: `${currentMetrics.resolution}%`,
       change: "+2.1%",
       trend: "up" as const,
       icon: CheckCircle,
@@ -50,7 +65,7 @@ const Dashboard = () => {
     },
     {
       title: "Escalation Rate",
-      value: "5.8%",
+      value: `${currentMetrics.escalation}%`,
       change: "-1.3%",
       trend: "down" as const,
       icon: AlertTriangle,
@@ -58,7 +73,7 @@ const Dashboard = () => {
     },
     {
       title: "Avg Response Time",
-      value: "1.2s",
+      value: `${currentMetrics.responseTime}s`,
       change: "-0.3s",
       trend: "down" as const,
       icon: Clock,
@@ -66,7 +81,7 @@ const Dashboard = () => {
     },
     {
       title: "Session Duration",
-      value: "4m 32s",
+      value: currentMetrics.duration,
       change: "+18s",
       trend: "up" as const,
       icon: Timer,
