@@ -1,0 +1,172 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { MetricCard } from "@/components/dashboard/MetricCard";
+import { SimpleChart } from "@/components/dashboard/SimpleChart";
+import { 
+  Users, 
+  MessageSquare, 
+  CheckCircle, 
+  AlertTriangle, 
+  Clock, 
+  Timer,
+  CalendarIcon
+} from "lucide-react";
+import { useState } from "react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+
+const Dashboard = () => {
+  const [dateRange, setDateRange] = useState("30d");
+  const [customDate, setCustomDate] = useState<Date>();
+
+  const metrics = [
+    {
+      title: "Unique Users",
+      value: "2,847",
+      change: "+12.5%",
+      trend: "up" as const,
+      icon: Users,
+      description: "Last 30 days"
+    },
+    {
+      title: "Total Interactions",
+      value: "18,459",
+      change: "+8.2%",
+      trend: "up" as const,
+      icon: MessageSquare,
+      description: "This month"
+    },
+    {
+      title: "Resolution Rate",
+      value: "94.2%",
+      change: "+2.1%",
+      trend: "up" as const,
+      icon: CheckCircle,
+      description: "Successfully resolved"
+    },
+    {
+      title: "Escalation Rate",
+      value: "5.8%",
+      change: "-1.3%",
+      trend: "down" as const,
+      icon: AlertTriangle,
+      description: "Transferred to human"
+    },
+    {
+      title: "Avg Response Time",
+      value: "1.2s",
+      change: "-0.3s",
+      trend: "down" as const,
+      icon: Clock,
+      description: "Response speed"
+    },
+    {
+      title: "Session Duration",
+      value: "4m 32s",
+      change: "+18s",
+      trend: "up" as const,
+      icon: Timer,
+      description: "Average conversation length"
+    }
+  ];
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Monitor your AI agent performance</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Select value={dateRange} onValueChange={setDateRange}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Select period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1d">Today</SelectItem>
+                <SelectItem value="7d">Last 7 days</SelectItem>
+                <SelectItem value="30d">Last 30 days</SelectItem>
+                <SelectItem value="90d">Last 90 days</SelectItem>
+                <SelectItem value="custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            {dateRange === "custom" && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-[140px] justify-start text-left font-normal",
+                      !customDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {customDate ? format(customDate, "PPP") : <span>Pick date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={customDate}
+                    onSelect={setCustomDate}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+          
+          <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+            <div className="w-2 h-2 bg-success rounded-full mr-2"></div>
+            System Healthy
+          </Badge>
+        </div>
+      </div>
+
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {metrics.map((metric, index) => (
+          <MetricCard key={index} {...metric} />
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SimpleChart
+          title="Interactions Over Time"
+          description="Daily conversation volume"
+          type="line"
+        />
+        <SimpleChart
+          title="Unique Visitors"
+          description="Visitors interacting with widget over time"
+          type="area"
+        />
+      </div>
+
+      {/* Additional Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SimpleChart
+          title="Resolution Trends"
+          description="Weekly performance metrics"
+          type="bar"
+        />
+        <SimpleChart
+          title="Sentiment Analysis"
+          description="Customer emotion breakdown"
+          type="pie"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
