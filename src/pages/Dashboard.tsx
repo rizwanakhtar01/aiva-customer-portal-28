@@ -9,8 +9,6 @@ import { SimpleChart } from "@/components/dashboard/SimpleChart";
 import { 
   Users, 
   MessageSquare, 
-  CheckCircle, 
-  AlertTriangle, 
   Clock, 
   Timer,
   CalendarIcon
@@ -26,11 +24,11 @@ const Dashboard = () => {
   // Mock function to generate metrics based on date range
   const getMetricsForDateRange = (range: string) => {
     const baseMetrics = {
-      "1d": { users: 347, interactions: 1245, resolution: 96.1, escalation: 3.9, responseTime: 0.8, duration: "2m 45s" },
-      "7d": { users: 1423, interactions: 7834, resolution: 95.3, escalation: 4.7, responseTime: 1.0, duration: "3m 12s" },
-      "30d": { users: 2847, interactions: 18459, resolution: 94.2, escalation: 5.8, responseTime: 1.2, duration: "4m 32s" },
-      "90d": { users: 8456, interactions: 52367, resolution: 93.8, escalation: 6.2, responseTime: 1.4, duration: "5m 18s" },
-      "custom": { users: 2847, interactions: 18459, resolution: 94.2, escalation: 5.8, responseTime: 1.2, duration: "4m 32s" }
+      "1d": { users: 347, interactions: 1245, responseTime: 0.8, duration: "2m 45s" },
+      "7d": { users: 1423, interactions: 7834, responseTime: 1.0, duration: "3m 12s" },
+      "30d": { users: 2847, interactions: 18459, responseTime: 1.2, duration: "4m 32s" },
+      "90d": { users: 8456, interactions: 52367, responseTime: 1.4, duration: "5m 18s" },
+      "custom": { users: 2847, interactions: 18459, responseTime: 1.2, duration: "4m 32s" }
     };
 
     return baseMetrics[range as keyof typeof baseMetrics] || baseMetrics["30d"];
@@ -54,22 +52,6 @@ const Dashboard = () => {
       trend: "up" as const,
       icon: MessageSquare,
       description: `${dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'This month' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'}`
-    },
-    {
-      title: "Resolution Rate",
-      value: `${currentMetrics.resolution}%`,
-      change: "+2.1%",
-      trend: "up" as const,
-      icon: CheckCircle,
-      description: "Successfully resolved"
-    },
-    {
-      title: "Escalation Rate",
-      value: `${currentMetrics.escalation}%`,
-      change: "-1.3%",
-      trend: "down" as const,
-      icon: AlertTriangle,
-      description: "Transferred to human"
     },
     {
       title: "Avg Response Time",
@@ -147,7 +129,7 @@ const Dashboard = () => {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />
         ))}
@@ -167,19 +149,6 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Additional Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SimpleChart
-          title="Resolution Trends"
-          description="Weekly performance metrics"
-          type="bar"
-        />
-        <SimpleChart
-          title="Sentiment Analysis"
-          description="Customer emotion breakdown"
-          type="pie"
-        />
-      </div>
     </div>
   );
 };
