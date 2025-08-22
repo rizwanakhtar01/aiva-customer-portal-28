@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Palette, 
@@ -54,6 +54,12 @@ const navigation = [
 
 export const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    // In a real app, this would clear tokens/session
+    navigate("/login");
+  };
 
   return (
     <div className={cn(
@@ -112,6 +118,7 @@ export const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
       <div className="p-4 border-t">
         <Button
           variant="ghost"
+          onClick={handleSignOut}
           className={cn(
             "w-full justify-start gap-3 text-muted-foreground hover:text-foreground",
             isCollapsed && "justify-center"
