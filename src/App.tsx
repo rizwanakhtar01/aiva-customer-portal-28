@@ -10,6 +10,8 @@ import Integrations from "./pages/Integrations";
 import Plans from "./pages/Plans";
 import UserManagement from "./pages/UserManagement";
 import KnowledgeBase from "./pages/KnowledgeBase";
+import FirstTimeSetup from "./pages/FirstTimeSetup";
+import ForgotPassword from "./pages/ForgotPassword";
 import { Layout } from "./components/layout/Layout";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +26,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/first-time-setup" element={<FirstTimeSetup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/customization" element={<Customization />} />

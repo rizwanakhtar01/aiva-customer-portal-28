@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
@@ -9,6 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(false);
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,8 +24,8 @@ const Login = () => {
         title: "Login successful",
         description: "Welcome to your Customer Portal",
       });
-      // In a real app, this would redirect to dashboard
-      window.location.href = "/dashboard";
+      // In a real app, this would check Cognito "NEW_PASSWORD_REQUIRED"
+      window.location.href = isFirstTime ? "/first-time-setup" : "/dashboard";
     }, 1500);
   };
 
@@ -72,6 +74,10 @@ const Login = () => {
                   className="h-12"
                 />
               </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="first-time" checked={isFirstTime} onCheckedChange={(v) => setIsFirstTime(!!v)} />
+                <Label htmlFor="first-time">I'm using a temporary password (first-time sign-in)</Label>
+              </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button
@@ -81,6 +87,9 @@ const Login = () => {
               >
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
+              <div className="text-center text-sm">
+                <a href="/forgot-password" className="text-primary hover:underline">Forgot your password?</a>
+              </div>
               <div className="text-center text-sm text-muted-foreground">
                 Need help? <a href="#" className="text-primary hover:underline">Contact support</a>
               </div>
