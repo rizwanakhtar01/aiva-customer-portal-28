@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { EmailPreview } from "@/components/EmailPreview";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,6 +32,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-accent flex items-center justify-center p-4">
+      <div className="absolute top-4 right-4">
+        <EmailPreview />
+      </div>
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
