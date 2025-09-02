@@ -38,9 +38,11 @@ const Login = () => {
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-glow rounded-2xl mx-auto mb-4 flex items-center justify-center">
-            <span className="text-2xl font-bold text-primary-foreground">AI</span>
-          </div>
+          <img 
+            src="/lovable-uploads/b0b24832-4ec5-4ba0-9d25-e913c03505ac.png" 
+            alt="Customer Portal Logo" 
+            className="w-16 h-16 mx-auto mb-4 rounded-2xl"
+          />
           <h1 className="text-2xl font-bold text-foreground">Customer Portal</h1>
           <p className="text-muted-foreground">Manage your AI support agent</p>
         </div>
