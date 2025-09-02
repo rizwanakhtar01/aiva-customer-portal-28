@@ -71,11 +71,20 @@ export const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-                <span className="text-sm font-bold text-primary-foreground">AI</span>
-              </div>
+              <img 
+                src="/lovable-uploads/b0b24832-4ec5-4ba0-9d25-e913c03505ac.png" 
+                alt="Customer Portal Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
               <span className="font-semibold text-foreground">Customer Portal</span>
             </div>
+          )}
+          {isCollapsed && (
+            <img 
+              src="/lovable-uploads/b0b24832-4ec5-4ba0-9d25-e913c03505ac.png" 
+              alt="Customer Portal Logo" 
+              className="w-8 h-8 rounded-lg"
+            />
           )}
           <Button
             variant="ghost"
