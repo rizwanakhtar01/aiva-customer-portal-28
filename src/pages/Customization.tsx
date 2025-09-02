@@ -232,12 +232,11 @@ const Customization = () => {
                 </code>
               </div>
               
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => {
-                    navigator.clipboard.writeText(`<!-- AI Customer Portal Widget -->
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  navigator.clipboard.writeText(`<!-- AI Customer Portal Widget -->
 <script>
   (function() {
     var script = document.createElement('script');
@@ -256,18 +255,14 @@ const Customization = () => {
   })();
 </script>
 <!-- End AI Customer Portal Widget -->`);
-                    toast({
-                      title: "Script copied!",
-                      description: "The widget script has been copied to your clipboard.",
-                    });
-                  }}
-                >
-                  Copy Script
-                </Button>
-                <Button variant="outline">
-                  View Documentation
-                </Button>
-              </div>
+                  toast({
+                    title: "Script copied!",
+                    description: "The widget script has been copied to your clipboard.",
+                  });
+                }}
+              >
+                Copy Script
+              </Button>
 
               <div className="bg-blue-50 text-blue-700 p-3 rounded-lg text-sm">
                 <p className="font-medium mb-1">Installation Instructions:</p>

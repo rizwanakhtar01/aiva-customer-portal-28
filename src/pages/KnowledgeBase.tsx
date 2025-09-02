@@ -260,8 +260,6 @@ const KnowledgeBase = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                      {getStatusBadge(doc.status)}
-                      
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="sm">
