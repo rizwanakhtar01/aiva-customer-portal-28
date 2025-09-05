@@ -9,7 +9,8 @@ import {
   X,
   MessageSquare,
   Crown,
-  Users
+  Users,
+  Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,11 @@ const navigation = [
     name: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Email AI Responses",
+    href: "/email-ai-responses",
+    icon: Mail,
   },
   {
     name: "Customization",

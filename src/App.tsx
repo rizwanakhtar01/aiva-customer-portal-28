@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import EmailAIResponses from "./pages/EmailAIResponses";
 import Customization from "./pages/Customization";
 import Integrations from "./pages/Integrations";
 import Plans from "./pages/Plans";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/email-ai-responses" element={<EmailAIResponses />} />
             <Route path="/customization" element={<Customization />} />
             <Route path="/integrations" element={<Integrations />} />
             <Route path="/plans" element={<Plans />} />
