@@ -22,8 +22,12 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Send
+  Send,
+  Inbox,
+  MailOpen,
+  MailCheck
 } from "lucide-react";
+import { MetricCard } from "@/components/dashboard/MetricCard";
 
 // Mock data
 const mockEmails = [
@@ -57,6 +61,26 @@ const mockEmails = [
     receivedAt: "2024-01-14 04:45 PM",
     aiDraft: "Thank you for reaching out to AIVA. We're excited to help you with your AI assistant needs...",
   },
+  {
+    id: 4,
+    subject: "Billing Inquiry",
+    from: "finance@company.com",
+    intent: "Billing",
+    configuredEmail: "billing@aivarevolution.com",
+    status: "New",
+    receivedAt: "2024-01-15 11:45 AM",
+    aiDraft: "Thank you for reaching out regarding your billing inquiry. Our finance team will review your request...",
+  },
+  {
+    id: 5,
+    subject: "Product Demo Request",
+    from: "sales@newcorp.com",
+    intent: "General Inquiry",
+    configuredEmail: "info@aivarevolution.com",
+    status: "Unread",
+    receivedAt: "2024-01-15 02:20 PM",
+    aiDraft: "We appreciate your interest in our AI solutions. Let's schedule a demo to showcase our capabilities...",
+  },
 ];
 
 const mockIntentConfigs = [
@@ -89,6 +113,8 @@ const getStatusBadge = (status: string) => {
     "Approved": "default",
     "Sent": "default",
     "Edited": "outline",
+    "New": "destructive",
+    "Unread": "outline",
   } as const;
   
   const colors = {
@@ -96,6 +122,8 @@ const getStatusBadge = (status: string) => {
     "Approved": "text-green-600",
     "Sent": "text-blue-600",
     "Edited": "text-orange-600",
+    "New": "text-red-600",
+    "Unread": "text-purple-600",
   } as const;
 
   return (
@@ -302,6 +330,18 @@ export default function EmailAIResponses() {
     return statusMatch && intentMatch;
   });
 
+  // Calculate stats
+  const totalEmails = emails.length;
+  const awaitingReview = emails.filter(email => email.status === "Pending Review").length;
+  const newEmails = emails.filter(email => email.status === "New").length;
+  const unreadEmails = emails.filter(email => email.status === "Unread").length;
+
+  const inboxEmails = emails.filter(email => 
+    email.status === "New" || email.status === "Unread" || email.status === "Approved"
+  );
+  const reviewEmails = emails.filter(email => email.status === "Pending Review");
+  const sentEmails = emails.filter(email => email.status === "Sent");
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -370,6 +410,42 @@ export default function EmailAIResponses() {
         </div>
       </div>
 
+      {/* Email Stats Panel */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard
+          title="Total Emails"
+          value={totalEmails.toString()}
+          change="0%"
+          trend="up"
+          icon={Mail}
+          description="All received emails"
+        />
+        <MetricCard
+          title="Awaiting Review"
+          value={awaitingReview.toString()}
+          change="0%"
+          trend="up"
+          icon={Clock}
+          description="Pending human approval"
+        />
+        <MetricCard
+          title="New"
+          value={newEmails.toString()}
+          change="0%"
+          trend="up"
+          icon={MailOpen}
+          description="Newly received emails"
+        />
+        <MetricCard
+          title="Unread"
+          value={unreadEmails.toString()}
+          change="0%"
+          trend="up"
+          icon={Inbox}
+          description="Opened but not actioned"
+        />
+      </div>
+
       <Tabs defaultValue="emails" className="space-y-4">
         <TabsList>
           <TabsTrigger value="emails">Email Management</TabsTrigger>
@@ -378,78 +454,171 @@ export default function EmailAIResponses() {
         </TabsList>
 
         <TabsContent value="emails" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Emails</CardTitle>
-              <CardDescription>
-                Review and manage AI-generated email responses
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4 mb-4">
-                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    <SelectItem value="pending">Pending Review</SelectItem>
-                    <SelectItem value="approved">Approved</SelectItem>
-                    <SelectItem value="sent">Sent</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select value={selectedIntent} onValueChange={setSelectedIntent}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by intent" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Intents</SelectItem>
-                    {mockIntentConfigs.map(config => (
-                      <SelectItem key={config.intent} value={config.intent}>
-                        {config.intent}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <Tabs defaultValue="inbox" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="inbox">
+                <Inbox className="h-4 w-4 mr-2" />
+                Inbox ({inboxEmails.length})
+              </TabsTrigger>
+              <TabsTrigger value="awaiting-review">
+                <Clock className="h-4 w-4 mr-2" />
+                Awaiting Review ({reviewEmails.length})
+              </TabsTrigger>
+              <TabsTrigger value="sent">
+                <MailCheck className="h-4 w-4 mr-2" />
+                Sent ({sentEmails.length})
+              </TabsTrigger>
+            </TabsList>
 
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>From</TableHead>
-                    <TableHead>Intent</TableHead>
-                    <TableHead>Configured Email</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Received</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredEmails.map((email) => (
-                    <TableRow key={email.id}>
-                      <TableCell className="font-medium">{email.subject}</TableCell>
-                      <TableCell>{email.from}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{email.intent}</Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {email.configuredEmail}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(email.status)}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {email.receivedAt}
-                      </TableCell>
-                      <TableCell>
-                        <EmailDraftDialog email={email} onStatusUpdate={handleStatusUpdate} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+            <TabsContent value="inbox" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Inbox</CardTitle>
+                  <CardDescription>
+                    All received emails that need attention or can be replied to manually
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>From</TableHead>
+                        <TableHead>Intent</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Received</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {inboxEmails.map((email) => (
+                        <TableRow key={email.id}>
+                          <TableCell className="font-medium">{email.subject}</TableCell>
+                          <TableCell>{email.from}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{email.intent}</Badge>
+                          </TableCell>
+                          <TableCell>{getStatusBadge(email.status)}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {email.receivedAt}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm">
+                                <Eye className="h-4 w-4 mr-2" />
+                                View
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Send className="h-4 w-4 mr-2" />
+                                Reply
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="awaiting-review" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Awaiting Review</CardTitle>
+                  <CardDescription>
+                    AI-generated responses waiting for human approval before sending
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>From</TableHead>
+                        <TableHead>Intent</TableHead>
+                        <TableHead>Configured Email</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Received</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reviewEmails.map((email) => (
+                        <TableRow key={email.id}>
+                          <TableCell className="font-medium">{email.subject}</TableCell>
+                          <TableCell>{email.from}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{email.intent}</Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {email.configuredEmail}
+                          </TableCell>
+                          <TableCell>{getStatusBadge(email.status)}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {email.receivedAt}
+                          </TableCell>
+                          <TableCell>
+                            <EmailDraftDialog email={email} onStatusUpdate={handleStatusUpdate} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="sent" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Sent Emails</CardTitle>
+                  <CardDescription>
+                    All emails that have been successfully sent to customers
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>To</TableHead>
+                        <TableHead>From</TableHead>
+                        <TableHead>Intent</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Sent At</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {sentEmails.map((email) => (
+                        <TableRow key={email.id}>
+                          <TableCell className="font-medium">{email.subject}</TableCell>
+                          <TableCell>{email.from}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {email.configuredEmail}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{email.intent}</Badge>
+                          </TableCell>
+                          <TableCell>{getStatusBadge(email.status)}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {email.receivedAt}
+                          </TableCell>
+                          <TableCell>
+                            <Button variant="outline" size="sm">
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="configuration" className="space-y-4">
