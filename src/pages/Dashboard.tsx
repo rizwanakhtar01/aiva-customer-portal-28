@@ -11,7 +11,11 @@ import {
   MessageSquare, 
   Clock, 
   Timer,
-  CalendarIcon
+  CalendarIcon,
+  AlertTriangle,
+  BarChart3,
+  Target,
+  MousePointer
 } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
@@ -24,11 +28,76 @@ const Dashboard = () => {
   // Mock function to generate metrics based on date range
   const getMetricsForDateRange = (range: string) => {
     const baseMetrics = {
-      "1d": { users: 347, interactions: 1245, responseTime: 0.8, duration: "2m 45s" },
-      "7d": { users: 1423, interactions: 7834, responseTime: 1.0, duration: "3m 12s" },
-      "30d": { users: 2847, interactions: 18459, responseTime: 1.2, duration: "4m 32s" },
-      "90d": { users: 8456, interactions: 52367, responseTime: 1.4, duration: "5m 18s" },
-      "custom": { users: 2847, interactions: 18459, responseTime: 1.2, duration: "4m 32s" }
+      "1d": { 
+        users: 347, 
+        interactions: 1245, 
+        responseTime: 0.8, 
+        duration: "2m 45s",
+        fallbackRate: 12.5,
+        channelWeb: 65,
+        channelMobile: 25,
+        channelApi: 10,
+        intentSupport: 45,
+        intentSales: 30,
+        intentGeneral: 25,
+        urlClickRate: 18.3
+      },
+      "7d": { 
+        users: 1423, 
+        interactions: 7834, 
+        responseTime: 1.0, 
+        duration: "3m 12s",
+        fallbackRate: 15.2,
+        channelWeb: 68,
+        channelMobile: 22,
+        channelApi: 10,
+        intentSupport: 42,
+        intentSales: 33,
+        intentGeneral: 25,
+        urlClickRate: 21.7
+      },
+      "30d": { 
+        users: 2847, 
+        interactions: 18459, 
+        responseTime: 1.2, 
+        duration: "4m 32s",
+        fallbackRate: 13.8,
+        channelWeb: 70,
+        channelMobile: 20,
+        channelApi: 10,
+        intentSupport: 40,
+        intentSales: 35,
+        intentGeneral: 25,
+        urlClickRate: 24.5
+      },
+      "90d": { 
+        users: 8456, 
+        interactions: 52367, 
+        responseTime: 1.4, 
+        duration: "5m 18s",
+        fallbackRate: 16.1,
+        channelWeb: 72,
+        channelMobile: 18,
+        channelApi: 10,
+        intentSupport: 38,
+        intentSales: 37,
+        intentGeneral: 25,
+        urlClickRate: 26.8
+      },
+      "custom": { 
+        users: 2847, 
+        interactions: 18459, 
+        responseTime: 1.2, 
+        duration: "4m 32s",
+        fallbackRate: 13.8,
+        channelWeb: 70,
+        channelMobile: 20,
+        channelApi: 10,
+        intentSupport: 40,
+        intentSales: 35,
+        intentGeneral: 25,
+        urlClickRate: 24.5
+      }
     };
 
     return baseMetrics[range as keyof typeof baseMetrics] || baseMetrics["30d"];
@@ -68,6 +137,38 @@ const Dashboard = () => {
       trend: "up" as const,
       icon: Timer,
       description: "Average conversation length"
+    },
+    {
+      title: "Fallback Rate",
+      value: `${currentMetrics.fallbackRate}%`,
+      change: "-2.1%",
+      trend: "down" as const,
+      icon: AlertTriangle,
+      description: "When AI couldn't help"
+    },
+    {
+      title: "Channel Distribution",
+      value: `${currentMetrics.channelWeb}%`,
+      change: "+3.2%",
+      trend: "up" as const,
+      icon: BarChart3,
+      description: "Web widget usage"
+    },
+    {
+      title: "Customer Intents",
+      value: `${currentMetrics.intentSupport}%`,
+      change: "-1.5%",
+      trend: "down" as const,
+      icon: Target,
+      description: "Top intent: Support"
+    },
+    {
+      title: "URL Click Rate",
+      value: `${currentMetrics.urlClickRate}%`,
+      change: "+4.7%",
+      trend: "up" as const,
+      icon: MousePointer,
+      description: "Links clicked in conversations"
     }
   ];
 
@@ -122,7 +223,7 @@ const Dashboard = () => {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />
         ))}
