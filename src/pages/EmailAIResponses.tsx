@@ -133,6 +133,219 @@ const getStatusBadge = (status: string) => {
   );
 };
 
+const EmailViewDialog = ({ email }: { email: any }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Eye className="h-4 w-4 mr-2" />
+          View
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Email Details</DialogTitle>
+          <DialogDescription>
+            View the complete email information
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <Label className="font-medium">Subject:</Label>
+              <p className="text-muted-foreground">{email.subject}</p>
+            </div>
+            <div>
+              <Label className="font-medium">From:</Label>
+              <p className="text-muted-foreground">{email.from}</p>
+            </div>
+            <div>
+              <Label className="font-medium">Intent:</Label>
+              <Badge variant="outline">{email.intent}</Badge>
+            </div>
+            <div>
+              <Label className="font-medium">Status:</Label>
+              {getStatusBadge(email.status)}
+            </div>
+            <div>
+              <Label className="font-medium">Received:</Label>
+              <p className="text-muted-foreground">{email.receivedAt}</p>
+            </div>
+            <div>
+              <Label className="font-medium">Configured Email:</Label>
+              <p className="text-muted-foreground">{email.configuredEmail}</p>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <Label>Email Content</Label>
+            <div className="p-4 bg-muted rounded-md">
+              <p className="text-sm">
+                Hello, I would like to inquire about your services. Please provide more information about your offerings and pricing. Looking forward to hearing from you soon.
+              </p>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const EmailReplyDialog = ({ email, onStatusUpdate }: { email: any; onStatusUpdate?: (emailId: number, status: string) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const { toast } = useToast();
+
+  const handleGenerateAI = () => {
+    setIsGeneratingAI(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      const aiResponse = `Dear ${email.from.split('@')[0]},
+
+Thank you for reaching out to us regarding "${email.subject}". We appreciate your interest in our services.
+
+${email.intent === "Corporate Events" 
+  ? "Our corporate events team specializes in creating memorable experiences tailored to your business needs. We offer comprehensive event planning services including venue selection, catering, entertainment, and technical support."
+  : email.intent === "Technical Support"
+  ? "Our technical support team has received your request and is currently reviewing the details. We'll investigate the issue and provide a resolution within 24 hours."
+  : "We're excited to help you with your inquiry. Our team will review your request and provide detailed information about our services and how we can assist you."
+}
+
+Please let us know if you have any specific requirements or questions, and we'll be happy to provide a customized solution.
+
+Best regards,
+AIVA Support Team`;
+      
+      setReplyContent(aiResponse);
+      setIsGeneratingAI(false);
+      toast({
+        title: "AI Response Generated",
+        description: "AI has generated a response. You can edit it before sending.",
+      });
+    }, 2000);
+  };
+
+  const handleSendReply = () => {
+    if (replyContent.trim()) {
+      onStatusUpdate?.(email.id, "Sent");
+      toast({
+        title: "Reply Sent",
+        description: "Your response has been sent successfully.",
+      });
+      setIsOpen(false);
+      setReplyContent("");
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Send className="h-4 w-4 mr-2" />
+          Reply
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Reply to Email</DialogTitle>
+          <DialogDescription>
+            Compose your response or generate one using AI
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          {/* Original Email Info */}
+          <div className="p-4 bg-muted rounded-lg">
+            <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+              <div>
+                <Label className="font-medium">From:</Label>
+                <p className="text-muted-foreground">{email.from}</p>
+              </div>
+              <div>
+                <Label className="font-medium">Subject:</Label>
+                <p className="text-muted-foreground">{email.subject}</p>
+              </div>
+            </div>
+            <div className="text-sm">
+              <Label className="font-medium">Original Message:</Label>
+              <p className="text-muted-foreground mt-1">
+                Hello, I would like to inquire about your services. Please provide more information about your offerings and pricing.
+              </p>
+            </div>
+          </div>
+
+          {/* Reply Composition */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label>Your Response</Label>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleGenerateAI}
+                disabled={isGeneratingAI}
+              >
+                {isGeneratingAI ? (
+                  <>
+                    <Clock className="h-4 w-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" />
+                    Generate with AI
+                  </>
+                )}
+              </Button>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <Label className="font-medium">From:</Label>
+                  <p className="text-muted-foreground">{email.configuredEmail}</p>
+                </div>
+                <div>
+                  <Label className="font-medium">To:</Label>
+                  <p className="text-muted-foreground">{email.from}</p>
+                </div>
+              </div>
+              
+              <Textarea
+                placeholder="Type your response here or use 'Generate with AI' to create a draft..."
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                rows={12}
+                className="resize-none"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-4">
+            <Button 
+              className="flex-1" 
+              onClick={handleSendReply}
+              disabled={!replyContent.trim()}
+            >
+              <Send className="h-4 w-4 mr-2" />
+              Send Reply
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex-1" 
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const EmailDraftDialog = ({ email, onStatusUpdate }: { email: any; onStatusUpdate: (emailId: number, status: string) => void }) => {
   const [draft, setDraft] = useState(email.aiDraft);
   const [isEditing, setIsEditing] = useState(false);
@@ -504,14 +717,8 @@ export default function EmailAIResponses() {
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-2">
-                              <Button variant="outline" size="sm">
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Send className="h-4 w-4 mr-2" />
-                                Reply
-                              </Button>
+                              <EmailViewDialog email={email} />
+                              <EmailReplyDialog email={email} onStatusUpdate={handleStatusUpdate} />
                             </div>
                           </TableCell>
                         </TableRow>
