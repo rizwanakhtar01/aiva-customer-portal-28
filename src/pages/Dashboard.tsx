@@ -12,6 +12,7 @@ import { TopQuestionsChart } from "@/components/dashboard/TopQuestionsChart";
 import { OfficeHoursChart } from "@/components/dashboard/OfficeHoursChart";
 import { SentimentChart } from "@/components/dashboard/SentimentChart";
 import { ConversionFunnelChart } from "@/components/dashboard/ConversionFunnelChart";
+import { ChannelDistributionChart } from "@/components/dashboard/ChannelDistributionChart";
 import { 
   Users, 
   MessageSquare, 
@@ -227,14 +228,6 @@ const Dashboard = () => {
       description: "When AI couldn't help"
     },
     {
-      title: "Channel Distribution",
-      value: `${currentMetrics.channelWeb}%`,
-      change: "+3.2%",
-      trend: "up" as const,
-      icon: BarChart3,
-      description: "Web widget usage"
-    },
-    {
       title: "Customer Intents",
       value: `${currentMetrics.intentSupport}%`,
       change: "-1.5%",
@@ -310,7 +303,7 @@ const Dashboard = () => {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />
         ))}
@@ -344,8 +337,12 @@ const Dashboard = () => {
           <TopQuestionsChart dateRange={dateRange} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ChannelDistributionChart dateRange={dateRange} />
           <OfficeHoursChart dateRange={dateRange} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SentimentChart dateRange={dateRange} />
           <ConversionFunnelChart dateRange={dateRange} />
         </div>
