@@ -25,12 +25,12 @@ export const TopQuestionsChart = ({ dateRange }: TopQuestionsChartProps) => {
           Most frequently asked questions - {dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'This month' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent className="h-80">
+        <div className="h-full overflow-y-auto pr-2 space-y-3">
           {topQuestions.map((item, index) => (
-            <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground mb-1">
+            <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground mb-1 truncate">
                   {item.question}
                 </p>
                 <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export const TopQuestionsChart = ({ dateRange }: TopQuestionsChartProps) => {
                   </span>
                 </div>
               </div>
-              <Badge variant="secondary" className="ml-3">
+              <Badge variant="secondary" className="ml-2 text-xs flex-shrink-0">
                 {item.count.toLocaleString()}
               </Badge>
             </div>
