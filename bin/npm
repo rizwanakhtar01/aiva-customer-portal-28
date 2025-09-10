@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Custom npm wrapper for Replit compatibility
+# Intercepts 'npm run dev' and runs Vite on port 5000
+
+if [ "$1" = "run" ] && [ "$2" = "dev" ]; then
+    echo "🔧 Replit: Starting Vite development server on port 5000..."
+    exec npx vite --port 5000 --host 0.0.0.0
+else
+    # For all other npm commands, use the system npm
+    exec /usr/bin/npm "$@"
+fi
