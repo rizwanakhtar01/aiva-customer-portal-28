@@ -24,7 +24,6 @@ import {
   AlertCircle,
   Send,
   Inbox,
-  MailOpen,
   MailCheck
 } from "lucide-react";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -67,7 +66,7 @@ const mockEmails = [
     from: "finance@company.com",
     intent: "Billing",
     configuredEmail: "billing@aivarevolution.com",
-    status: "New",
+    status: "Pending Review",
     receivedAt: "2024-01-15 11:45 AM",
     aiDraft: "Thank you for reaching out regarding your billing inquiry. Our finance team will review your request...",
   },
@@ -113,17 +112,15 @@ const getStatusBadge = (status: string) => {
     "Approved": "default",
     "Sent": "default",
     "Edited": "outline",
-    "New": "destructive",
-    "Unread": "outline",
+    "Unread": "default",
   } as const;
   
   const colors = {
     "Pending Review": "text-yellow-600",
-    "Approved": "text-green-600",
+    "Approved": "bg-green-600 text-white",
     "Sent": "text-blue-600",
     "Edited": "text-orange-600",
-    "New": "text-red-600",
-    "Unread": "text-purple-600",
+    "Unread": "bg-orange-500 text-white",
   } as const;
 
   return (
@@ -546,11 +543,10 @@ export default function EmailAIResponses() {
   // Calculate stats
   const totalEmails = emails.length;
   const awaitingReview = emails.filter(email => email.status === "Pending Review").length;
-  const newEmails = emails.filter(email => email.status === "New").length;
   const unreadEmails = emails.filter(email => email.status === "Unread").length;
 
   const inboxEmails = emails.filter(email => 
-    email.status === "New" || email.status === "Unread" || email.status === "Approved"
+    email.status === "Unread" || email.status === "Approved"
   );
   const reviewEmails = emails.filter(email => email.status === "Pending Review");
   const sentEmails = emails.filter(email => email.status === "Sent");
@@ -559,7 +555,7 @@ export default function EmailAIResponses() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Email AI Responses</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Email</h1>
           <p className="text-muted-foreground">
             Manage AI-generated email responses and configure automated workflows
           </p>
@@ -640,14 +636,6 @@ export default function EmailAIResponses() {
           trend="up"
           icon={Clock}
           description="Pending human approval"
-        />
-        <MetricCard
-          title="New"
-          value={newEmails.toString()}
-          change="0%"
-          trend="up"
-          icon={MailOpen}
-          description="Newly received emails"
         />
         <MetricCard
           title="Unread"

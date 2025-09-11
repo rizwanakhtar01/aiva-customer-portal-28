@@ -27,7 +27,7 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    name: "Email AI Responses",
+    name: "Email",
     href: "/email-ai-responses",
     icon: Mail,
   },
