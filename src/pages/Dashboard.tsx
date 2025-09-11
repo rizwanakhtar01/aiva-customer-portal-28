@@ -355,9 +355,6 @@ const Dashboard = () => {
                       <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">
                         Number of Clicks
                       </th>
-                      <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">
-                        Last Clicked
-                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -376,9 +373,6 @@ const Dashboard = () => {
                         </td>
                         <td className="px-4 py-3 text-center text-sm font-medium text-foreground">
                           {urlData.clicks}
-                        </td>
-                        <td className="px-4 py-3 text-center text-sm text-muted-foreground">
-                          {urlData.lastClicked}
                         </td>
                       </tr>
                     ))}
