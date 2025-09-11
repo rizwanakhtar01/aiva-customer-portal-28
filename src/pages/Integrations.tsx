@@ -13,7 +13,9 @@ import {
   ExternalLink, 
   CheckCircle, 
   AlertCircle,
-  Plus
+  Plus,
+  Facebook,
+  Instagram
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -33,6 +35,20 @@ const Integrations = () => {
     password: ""
   });
 
+  const [facebookConfig, setFacebookConfig] = useState({
+    enabled: false,
+    pageId: "",
+    accessToken: "",
+    webhookUrl: ""
+  });
+
+  const [instagramConfig, setInstagramConfig] = useState({
+    enabled: false,
+    businessAccountId: "",
+    accessToken: "",
+    webhookUrl: ""
+  });
+
   const { toast } = useToast();
 
   const handleSaveWhatsApp = () => {
@@ -49,6 +65,20 @@ const Integrations = () => {
     });
   };
 
+  const handleSaveFacebook = () => {
+    toast({
+      title: "Facebook integration updated",
+      description: "Your Facebook configuration has been saved successfully.",
+    });
+  };
+
+  const handleSaveInstagram = () => {
+    toast({
+      title: "Instagram integration updated",
+      description: "Your Instagram configuration has been saved successfully.",
+    });
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -58,7 +88,7 @@ const Integrations = () => {
       </div>
 
       {/* Integration Status Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -101,15 +131,36 @@ const Integrations = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Plus className="h-5 w-5 text-gray-600" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Facebook className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="font-medium">Add More</p>
-                  <p className="text-sm text-muted-foreground">Coming Soon</p>
+                  <p className="font-medium">Facebook</p>
+                  <p className="text-sm text-muted-foreground">Messenger API</p>
                 </div>
               </div>
-              <Badge variant="outline">Available</Badge>
+              <Badge variant={facebookConfig.enabled ? "default" : "secondary"}>
+                {facebookConfig.enabled ? "Connected" : "Disconnected"}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                  <Instagram className="h-5 w-5 text-pink-600" />
+                </div>
+                <div>
+                  <p className="font-medium">Instagram</p>
+                  <p className="text-sm text-muted-foreground">Messaging API</p>
+                </div>
+              </div>
+              <Badge variant={instagramConfig.enabled ? "default" : "secondary"}>
+                {instagramConfig.enabled ? "Connected" : "Disconnected"}
+              </Badge>
             </div>
           </CardContent>
         </Card>
@@ -287,6 +338,174 @@ const Integrations = () => {
             <Button onClick={handleSaveEmail} className="w-full" disabled={!emailConfig.enabled}>
               <Settings className="mr-2 h-4 w-4" />
               Save Email Configuration
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Facebook Integration */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Facebook className="h-5 w-5 text-blue-600" />
+              Facebook Messenger
+            </CardTitle>
+            <CardDescription>
+              Connect your Facebook Page to handle customer messages
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="facebook-enabled" className="text-base font-medium">
+                  Enable Facebook Integration
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Allow customers to contact you via Facebook Messenger
+                </p>
+              </div>
+              <Switch
+                id="facebook-enabled"
+                checked={facebookConfig.enabled}
+                onCheckedChange={(checked) => 
+                  setFacebookConfig(prev => ({ ...prev, enabled: checked }))
+                }
+              />
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="facebook-page-id">Facebook Page ID</Label>
+                <Input
+                  id="facebook-page-id"
+                  placeholder="123456789012345"
+                  value={facebookConfig.pageId}
+                  onChange={(e) => setFacebookConfig(prev => ({ ...prev, pageId: e.target.value }))}
+                  disabled={!facebookConfig.enabled}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="facebook-access-token">Access Token</Label>
+                <Input
+                  id="facebook-access-token"
+                  type="password"
+                  placeholder="Enter your Facebook access token"
+                  value={facebookConfig.accessToken}
+                  onChange={(e) => setFacebookConfig(prev => ({ ...prev, accessToken: e.target.value }))}
+                  disabled={!facebookConfig.enabled}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="facebook-webhook-url">Webhook URL</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="facebook-webhook-url"
+                    value={facebookConfig.webhookUrl || "https://api.yourcompany.com/facebook/webhook"}
+                    onChange={(e) => setFacebookConfig(prev => ({ ...prev, webhookUrl: e.target.value }))}
+                    disabled={!facebookConfig.enabled}
+                  />
+                  <Button variant="outline" size="icon" disabled={!facebookConfig.enabled}>
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 p-3 bg-blue-50 text-blue-700 rounded-lg text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <span>You'll need a Facebook Messenger API account to use this integration.</span>
+            </div>
+
+            <Button onClick={handleSaveFacebook} className="w-full" disabled={!facebookConfig.enabled}>
+              <Settings className="mr-2 h-4 w-4" />
+              Save Facebook Configuration
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Instagram Integration */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Instagram className="h-5 w-5 text-pink-600" />
+              Instagram Messaging
+            </CardTitle>
+            <CardDescription>
+              Connect your Instagram Business account for direct messages
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="instagram-enabled" className="text-base font-medium">
+                  Enable Instagram Integration
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Handle customer inquiries via Instagram DMs
+                </p>
+              </div>
+              <Switch
+                id="instagram-enabled"
+                checked={instagramConfig.enabled}
+                onCheckedChange={(checked) => 
+                  setInstagramConfig(prev => ({ ...prev, enabled: checked }))
+                }
+              />
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="instagram-business-id">Instagram Business Account ID</Label>
+                <Input
+                  id="instagram-business-id"
+                  placeholder="17841400008460056"
+                  value={instagramConfig.businessAccountId}
+                  onChange={(e) => setInstagramConfig(prev => ({ ...prev, businessAccountId: e.target.value }))}
+                  disabled={!instagramConfig.enabled}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="instagram-access-token">Access Token</Label>
+                <Input
+                  id="instagram-access-token"
+                  type="password"
+                  placeholder="Enter your Instagram access token"
+                  value={instagramConfig.accessToken}
+                  onChange={(e) => setInstagramConfig(prev => ({ ...prev, accessToken: e.target.value }))}
+                  disabled={!instagramConfig.enabled}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="instagram-webhook-url">Webhook URL</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="instagram-webhook-url"
+                    value={instagramConfig.webhookUrl || "https://api.yourcompany.com/instagram/webhook"}
+                    onChange={(e) => setInstagramConfig(prev => ({ ...prev, webhookUrl: e.target.value }))}
+                    disabled={!instagramConfig.enabled}
+                  />
+                  <Button variant="outline" size="icon" disabled={!instagramConfig.enabled}>
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 p-3 bg-blue-50 text-blue-700 rounded-lg text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <span>You'll need an Instagram Messaging API account to use this integration.</span>
+            </div>
+
+            <Button onClick={handleSaveInstagram} className="w-full" disabled={!instagramConfig.enabled}>
+              <Settings className="mr-2 h-4 w-4" />
+              Save Instagram Configuration
             </Button>
           </CardContent>
         </Card>
