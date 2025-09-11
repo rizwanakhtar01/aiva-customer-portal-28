@@ -284,12 +284,17 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-[140px] justify-start text-left font-normal",
+                    "min-w-[140px] max-w-[200px] justify-start text-left font-normal truncate",
                     !customDate && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {customDate ? format(customDate, "PPP") : <span>Pick date</span>}
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span 
+                    className="truncate" 
+                    title={customDate ? format(customDate, "PPP") : "Pick date"}
+                  >
+                    {customDate ? format(customDate, "PPP") : "Pick date"}
+                  </span>
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
