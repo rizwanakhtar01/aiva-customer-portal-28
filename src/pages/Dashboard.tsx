@@ -232,55 +232,27 @@ const Dashboard = () => {
     }
   ];
 
-  // Sample AIVA-related URLs for the URL click dialog
-  const sampleUrls = [
+  // Sample URLs that customers clicked inside the chat widget
+  const urlClickData = [
     {
-      url: "https://aiva.ai/pricing",
-      title: "AIVA Pricing Plans",
-      clicks: 847,
-      category: "Product"
+      url: "https://aivarevolution.com/book-venue",
+      clicks: 42,
+      lastClicked: "Sept 10, 2025"
     },
     {
-      url: "https://aiva.ai/features/ai-assistant",
-      title: "AI Assistant Features", 
-      clicks: 623,
-      category: "Features"
+      url: "https://aivarevolution.com/corporate-events",
+      clicks: 25,
+      lastClicked: "Sept 09, 2025"
     },
     {
-      url: "https://aiva.ai/integrations/whatsapp",
-      title: "WhatsApp Integration Guide",
-      clicks: 412,
-      category: "Integration"
+      url: "https://aivarevolution.com/contact-sales",
+      clicks: 18,
+      lastClicked: "Sept 11, 2025"
     },
     {
-      url: "https://aiva.ai/support/getting-started",
-      title: "Getting Started Guide",
-      clicks: 386,
-      category: "Support"
-    },
-    {
-      url: "https://aiva.ai/demo",
-      title: "Schedule Demo",
-      clicks: 294,
-      category: "Sales"
-    },
-    {
-      url: "https://aiva.ai/blog/customer-service-automation",
-      title: "Customer Service Automation Best Practices",
-      clicks: 267,
-      category: "Blog"
-    },
-    {
-      url: "https://aiva.ai/api-docs",
-      title: "API Documentation",
-      clicks: 156,
-      category: "Developer"
-    },
-    {
-      url: "https://aiva.ai/case-studies",
-      title: "Customer Success Stories",
-      clicks: 134,
-      category: "Case Studies"
+      url: "https://aivarevolution.com/faqs",
+      clicks: 33,
+      lastClicked: "Sept 11, 2025"
     }
   ];
 
@@ -361,44 +333,63 @@ const Dashboard = () => {
               />
             </div>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <MousePointer className="h-5 w-5" />
-                URL Click Analytics
+                URL Click Details
               </DialogTitle>
               <DialogDescription>
-                Most clicked URLs in customer conversations ({dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'})
+                URLs that customers clicked inside the chat widget
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-4 overflow-y-auto max-h-[60vh]">
-              {sampleUrls.map((urlData, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                      <h4 className="font-medium text-sm text-foreground truncate">
-                        {urlData.title}
-                      </h4>
-                      <Badge variant="outline" className="text-xs">
-                        {urlData.category}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {urlData.url}
-                    </p>
-                  </div>
-                  <div className="text-right ml-4">
-                    <div className="text-sm font-medium text-foreground">
-                      {urlData.clicks.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      clicks
-                    </div>
-                  </div>
+            <div className="overflow-y-auto max-h-[60vh]">
+              <div className="rounded-md border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
+                        URL
+                      </th>
+                      <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">
+                        Number of Clicks
+                      </th>
+                      <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">
+                        Last Clicked
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {urlClickData.map((urlData, index) => (
+                      <tr key={index} className="border-b hover:bg-muted/30 transition-colors">
+                        <td className="px-4 py-3">
+                          <a
+                            href={urlData.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-blue-500 hover:text-blue-400 transition-colors text-sm break-all"
+                          >
+                            <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                            {urlData.url}
+                          </a>
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm font-medium text-foreground">
+                          {urlData.clicks}
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm text-muted-foreground">
+                          {urlData.lastClicked}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {urlClickData.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  No URL click data available for the selected period.
                 </div>
-              ))}
+              )}
             </div>
           </DialogContent>
         </Dialog>
