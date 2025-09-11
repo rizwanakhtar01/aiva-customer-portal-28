@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { SimpleChart } from "@/components/dashboard/SimpleChart";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -27,7 +28,8 @@ import {
   HelpCircle,
   UserCheck,
   TrendingUp,
-  ClockIcon
+  ClockIcon,
+  ExternalLink
 } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
@@ -36,6 +38,7 @@ import { cn } from "@/lib/utils";
 const Dashboard = () => {
   const [dateRange, setDateRange] = useState("30d");
   const [customDate, setCustomDate] = useState<Date>();
+  const [urlDialogOpen, setUrlDialogOpen] = useState(false);
 
   // Mock function to generate metrics based on date range
   const getMetricsForDateRange = (range: string) => {
@@ -220,28 +223,64 @@ const Dashboard = () => {
       description: "Average conversation length"
     },
     {
-      title: "Fallback Rate",
-      value: `${currentMetrics.fallbackRate}%`,
-      change: "-2.1%",
-      trend: "down" as const,
-      icon: AlertTriangle,
-      description: "When AI couldn't help"
-    },
-    {
       title: "Customer Intents",
       value: `${currentMetrics.intentSupport}%`,
       change: "-1.5%",
       trend: "down" as const,
       icon: Target,
       description: "Top intent: Support"
+    }
+  ];
+
+  // Sample AIVA-related URLs for the URL click dialog
+  const sampleUrls = [
+    {
+      url: "https://aiva.ai/pricing",
+      title: "AIVA Pricing Plans",
+      clicks: 847,
+      category: "Product"
     },
     {
-      title: "URL Click Rate",
-      value: `${currentMetrics.urlClickRate}%`,
-      change: "+4.7%",
-      trend: "up" as const,
-      icon: MousePointer,
-      description: "Links clicked in conversations"
+      url: "https://aiva.ai/features/ai-assistant",
+      title: "AI Assistant Features", 
+      clicks: 623,
+      category: "Features"
+    },
+    {
+      url: "https://aiva.ai/integrations/whatsapp",
+      title: "WhatsApp Integration Guide",
+      clicks: 412,
+      category: "Integration"
+    },
+    {
+      url: "https://aiva.ai/support/getting-started",
+      title: "Getting Started Guide",
+      clicks: 386,
+      category: "Support"
+    },
+    {
+      url: "https://aiva.ai/demo",
+      title: "Schedule Demo",
+      clicks: 294,
+      category: "Sales"
+    },
+    {
+      url: "https://aiva.ai/blog/customer-service-automation",
+      title: "Customer Service Automation Best Practices",
+      clicks: 267,
+      category: "Blog"
+    },
+    {
+      url: "https://aiva.ai/api-docs",
+      title: "API Documentation",
+      clicks: 156,
+      category: "Developer"
+    },
+    {
+      url: "https://aiva.ai/case-studies",
+      title: "Customer Success Stories",
+      clicks: 134,
+      category: "Case Studies"
     }
   ];
 
@@ -307,6 +346,62 @@ const Dashboard = () => {
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />
         ))}
+        
+        {/* URL Click Rate - Clickable */}
+        <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
+          <DialogTrigger asChild>
+            <div className="cursor-pointer">
+              <MetricCard
+                title="URL Click Rate"
+                value={`${currentMetrics.urlClickRate}%`}
+                change="+4.7%"
+                trend="up"
+                icon={MousePointer}
+                description="Links clicked in conversations"
+              />
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <MousePointer className="h-5 w-5" />
+                URL Click Analytics
+              </DialogTitle>
+              <DialogDescription>
+                Most clicked URLs in customer conversations ({dateRange === '1d' ? 'Today' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : dateRange === '90d' ? 'Last 90 days' : 'Selected period'})
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 overflow-y-auto max-h-[60vh]">
+              {sampleUrls.map((urlData, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <h4 className="font-medium text-sm text-foreground truncate">
+                        {urlData.title}
+                      </h4>
+                      <Badge variant="outline" className="text-xs">
+                        {urlData.category}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {urlData.url}
+                    </p>
+                  </div>
+                  <div className="text-right ml-4">
+                    <div className="text-sm font-medium text-foreground">
+                      {urlData.clicks.toLocaleString()}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      clicks
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Existing Charts Section */}
