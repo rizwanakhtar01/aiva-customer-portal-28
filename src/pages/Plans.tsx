@@ -1,26 +1,30 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Crown, 
-  Check, 
-  Users, 
-  MessageSquare, 
-  BarChart3, 
-  Shield,
-  Zap,
+import {
+  Crown,
+  Check,
+  Users,
+  MessageSquare,
+  BarChart3,
   Mail,
-  Bot
+  Bot,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface PlanLimits {
-  conversations: number | "unlimited" | "setup";
-  users: number | "unlimited" | "setup";
-  integrations: number | "unlimited" | "setup";
+  conversations: number | "unlimited";
+  users: number | "unlimited";
+  integrations: number | "unlimited";
 }
 
 interface Plan {
@@ -47,27 +51,6 @@ const Plans = () => {
 
   const plans: Plan[] = [
     {
-      id: "activation",
-      name: "Activation Setup",
-      price: "£995",
-      period: "one-off",
-      description: "Initial setup and activation of your AI customer portal",
-      features: [
-        "Complete system setup",
-        "AI configuration & training",
-        "Initial integrations setup",
-        "Custom branding setup",
-        "Staff training session",
-        "Technical support during setup"
-      ],
-      limits: {
-        conversations: "setup",
-        users: "setup",
-        integrations: "setup"
-      },
-      popular: false
-    },
-    {
       id: "webchat",
       name: "Web Chat & Visibility",
       price: "£995",
@@ -81,14 +64,14 @@ const Plans = () => {
         "Custom branding",
         "24/7 chat availability",
         "Integration support",
-        "Priority customer support"
+        "Priority customer support",
       ],
       limits: {
         conversations: "unlimited",
         users: "unlimited",
-        integrations: "unlimited"
+        integrations: "unlimited",
       },
-      popular: true
+      popular: true,
     },
     {
       id: "email",
@@ -104,14 +87,14 @@ const Plans = () => {
         "Custom email templates",
         "Integration with existing systems",
         "Advanced workflow automation",
-        "Priority support"
+        "Priority support",
       ],
       limits: {
         conversations: "unlimited",
         users: "unlimited",
-        integrations: "unlimited"
+        integrations: "unlimited",
       },
-      popular: false
+      popular: false,
     },
     {
       id: "messenger",
@@ -127,22 +110,22 @@ const Plans = () => {
         "Message analytics",
         "Custom automated workflows",
         "Social media monitoring",
-        "Customer support"
+        "Customer support",
       ],
       limits: {
         conversations: "unlimited",
         users: "unlimited",
-        integrations: "unlimited"
+        integrations: "unlimited",
       },
-      popular: false
-    }
+      popular: false,
+    },
   ];
 
-  const currentPlanData = plans.find(plan => plan.id === currentPlan);
+  const currentPlanData = plans.find((plan) => plan.id === currentPlan);
   const usageData = {
     conversations: 3247,
     users: 3,
-    integrations: 2
+    integrations: 2,
   };
 
   return (
@@ -150,7 +133,9 @@ const Plans = () => {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Plans & Usage</h1>
-        <p className="text-muted-foreground mt-1">Manage your subscription and view usage metrics</p>
+        <p className="text-muted-foreground mt-1">
+          Manage your subscription and view usage metrics
+        </p>
       </div>
 
       {/* Current Plan Overview */}
@@ -162,9 +147,7 @@ const Plans = () => {
                 <Crown className="h-5 w-5 text-primary" />
                 Current Plan: {currentPlanData?.name}
               </CardTitle>
-              <CardDescription>
-                {currentPlanData?.description}
-              </CardDescription>
+              <CardDescription>{currentPlanData?.description}</CardDescription>
             </div>
             <Badge variant="default" className="text-sm">
               Active
@@ -181,19 +164,20 @@ const Plans = () => {
                   <span className="text-sm font-medium">Conversations</span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {usageData.conversations.toLocaleString()} / {
-                    typeof currentPlanData?.limits.conversations === 'number' 
-                      ? currentPlanData.limits.conversations.toLocaleString()
-                      : (currentPlanData?.limits.conversations || "N/A")
-                  }
+                  {usageData.conversations.toLocaleString()} /{" "}
+                  {typeof currentPlanData?.limits.conversations === "number"
+                    ? currentPlanData.limits.conversations.toLocaleString()
+                    : currentPlanData?.limits.conversations || "N/A"}
                 </span>
               </div>
-              <Progress 
+              <Progress
                 value={
-                  typeof currentPlanData?.limits.conversations === 'number'
-                    ? (usageData.conversations / currentPlanData.limits.conversations) * 100
+                  typeof currentPlanData?.limits.conversations === "number"
+                    ? (usageData.conversations /
+                        currentPlanData.limits.conversations) *
+                      100
                     : 32
-                } 
+                }
                 className="h-2"
               />
             </div>
@@ -206,19 +190,18 @@ const Plans = () => {
                   <span className="text-sm font-medium">Users</span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {usageData.users} / {
-                    typeof currentPlanData?.limits.users === 'number'
-                      ? currentPlanData.limits.users
-                      : (currentPlanData?.limits.users || "N/A")
-                  }
+                  {usageData.users} /{" "}
+                  {typeof currentPlanData?.limits.users === "number"
+                    ? currentPlanData.limits.users
+                    : currentPlanData?.limits.users || "N/A"}
                 </span>
               </div>
-              <Progress 
+              <Progress
                 value={
-                  typeof currentPlanData?.limits.users === 'number'
+                  typeof currentPlanData?.limits.users === "number"
                     ? (usageData.users / currentPlanData.limits.users) * 100
                     : 60
-                } 
+                }
                 className="h-2"
               />
             </div>
@@ -231,15 +214,18 @@ const Plans = () => {
                   <span className="text-sm font-medium">Integrations</span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {usageData.integrations} / {currentPlanData?.limits.integrations || "N/A"}
+                  {usageData.integrations} /{" "}
+                  {currentPlanData?.limits.integrations || "N/A"}
                 </span>
               </div>
-              <Progress 
+              <Progress
                 value={
-                  typeof currentPlanData?.limits.integrations === 'number'
-                    ? (usageData.integrations / currentPlanData.limits.integrations) * 100
+                  typeof currentPlanData?.limits.integrations === "number"
+                    ? (usageData.integrations /
+                        currentPlanData.limits.integrations) *
+                      100
                     : 100
-                } 
+                }
                 className="h-2"
               />
             </div>
@@ -250,11 +236,44 @@ const Plans = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Next billing date</p>
-              <p className="text-sm text-muted-foreground">December 15, 2024</p>
+              <p className="text-sm text-muted-foreground">October 15, 2025</p>
             </div>
             <div className="text-right">
-              <p className="font-medium">{currentPlanData?.price}/{currentPlanData?.period}</p>
-              <p className="text-sm text-muted-foreground">Auto-renewal enabled</p>
+              <p className="font-medium">
+                {currentPlanData?.price}/{currentPlanData?.period}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Auto-renewal enabled
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* One-off Activation Cost */}
+      <Card className="border-warning/20 bg-warning/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-warning">
+            <Crown className="h-5 w-5" />
+            Required Activation Setup
+          </CardTitle>
+          <CardDescription>
+            One-time setup cost required before any monthly plan activation
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-3xl font-bold text-warning">£995</div>
+              <p className="text-sm text-muted-foreground">One-time payment</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-medium">Includes:</p>
+              <ul className="text-xs text-muted-foreground mt-1">
+                <li>• Complete system setup</li>
+                <li>• AI configuration & training</li>
+                <li>• Staff training session</li>
+              </ul>
             </div>
           </div>
         </CardContent>
@@ -262,14 +281,16 @@ const Plans = () => {
 
       {/* Available Plans */}
       <div>
-        <h2 className="text-2xl font-bold text-foreground mb-6">Available Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <h2 className="text-2xl font-bold text-foreground mb-6">
+          Monthly Plans
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => (
-            <Card 
-              key={plan.id} 
+            <Card
+              key={plan.id}
               className={`relative ${
-                plan.popular ? 'border-primary/50 ring-1 ring-primary/20' : ''
-              } ${plan.id === currentPlan ? 'bg-muted/30' : ''}`}
+                plan.popular ? "border-primary/50 ring-1 ring-primary/20" : ""
+              } ${plan.id === currentPlan ? "bg-muted/30" : ""}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -278,13 +299,14 @@ const Plans = () => {
                   </Badge>
                 </div>
               )}
-              
+
               <CardHeader className="text-center">
                 <CardTitle className="flex items-center justify-center gap-2">
-                  {plan.id === 'activation' && <Shield className="h-5 w-5" />}
-                  {plan.id === 'webchat' && <MessageSquare className="h-5 w-5" />}
-                  {plan.id === 'email' && <Mail className="h-5 w-5" />}
-                  {plan.id === 'messenger' && <Bot className="h-5 w-5" />}
+                  {plan.id === "webchat" && (
+                    <MessageSquare className="h-5 w-5" />
+                  )}
+                  {plan.id === "email" && <Mail className="h-5 w-5" />}
+                  {plan.id === "messenger" && <Bot className="h-5 w-5" />}
                   {plan.name}
                 </CardTitle>
                 <div className="space-y-2">
@@ -314,7 +336,9 @@ const Plans = () => {
                   className="w-full"
                   disabled={plan.id === currentPlan}
                 >
-                  {plan.id === currentPlan ? "Current Plan" : `Upgrade to ${plan.name}`}
+                  {plan.id === currentPlan
+                    ? "Current Plan"
+                    : `Upgrade to ${plan.name}`}
                 </Button>
               </CardContent>
             </Card>
@@ -331,14 +355,34 @@ const Plans = () => {
         <CardContent>
           <div className="space-y-4">
             {[
-              { date: "Nov 15, 2024", amount: "£995.00", status: "Paid", plan: "Web Chat & Visibility" },
-              { date: "Oct 15, 2024", amount: "£995.00", status: "Paid", plan: "Web Chat & Visibility" },
-              { date: "Sep 15, 2024", amount: "£995.00", status: "Paid", plan: "Activation Setup" },
+              {
+                date: "September 15, 2025",
+                amount: "£995.00",
+                status: "Paid",
+                plan: "Web Chat & Visibility",
+              },
+              {
+                date: "August 15, 2025",
+                amount: "£995.00",
+                status: "Paid",
+                plan: "Web Chat & Visibility",
+              },
+              {
+                date: "July 15, 2025",
+                amount: "£995.00",
+                status: "Paid",
+                plan: "Activation Setup",
+              },
             ].map((transaction, index) => (
-              <div key={index} className="flex items-center justify-between py-2">
+              <div
+                key={index}
+                className="flex items-center justify-between py-2"
+              >
                 <div>
                   <p className="font-medium">{transaction.plan} Plan</p>
-                  <p className="text-sm text-muted-foreground">{transaction.date}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {transaction.date}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium">{transaction.amount}</p>
