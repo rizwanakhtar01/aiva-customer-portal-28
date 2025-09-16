@@ -66,7 +66,7 @@ export const UnansweredQuestionsChart = ({ dateRange }: UnansweredQuestionsChart
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <HelpCircle className="h-5 w-5 text-destructive" />
-          Unanswered Questions
+          Knowledge Gaps
         </CardTitle>
         <CardDescription>
           Questions where AI responded with fallback - {getDateRangeText()}
