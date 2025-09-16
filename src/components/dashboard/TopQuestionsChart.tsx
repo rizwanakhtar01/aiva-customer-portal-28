@@ -26,7 +26,7 @@ export const TopQuestionsChart = ({ dateRange }: TopQuestionsChartProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="h-80">
-        <div className="h-full overflow-y-auto pr-2 space-y-3">
+        <div className="h-full overflow-y-auto space-y-3 scrollbar-custom pr-2">
           {topQuestions.map((item, index) => (
             <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
               <div className="flex-1 min-w-0">

@@ -56,7 +56,7 @@ export const ConversionFunnelChart = ({ dateRange }: ConversionFunnelChartProps)
       <CardContent className="h-80">
         <div className="h-full flex flex-col">
           {/* Funnel Stages - Scrollable */}
-          <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+          <div className="flex-1 overflow-y-auto space-y-2 scrollbar-custom pr-2">
             {funnelData.map((stage, index) => (
               <div key={index} className="relative">
                 {/* Funnel Stage */}
