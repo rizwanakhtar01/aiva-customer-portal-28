@@ -442,7 +442,7 @@ const EmailDraftDialog = ({ email, onStatusUpdate }: { email: any; onStatusUpdat
           Review
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Email Draft Review</DialogTitle>
           <DialogDescription>
@@ -466,6 +466,15 @@ const EmailDraftDialog = ({ email, onStatusUpdate }: { email: any; onStatusUpdat
             <div>
               <Label className="font-medium">Intent:</Label>
               <Badge variant="outline">{email.intent}</Badge>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <Label>Original Customer Email</Label>
+            <div className="p-4 bg-muted rounded-md">
+              <p className="text-sm whitespace-pre-wrap">
+                {email.originalBody || "No content available."}
+              </p>
             </div>
           </div>
           
