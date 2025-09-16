@@ -32,61 +32,125 @@ import { MetricCard } from "@/components/dashboard/MetricCard";
 const mockEmails = [
   {
     id: 1,
-    subject: "Corporate Event Inquiry",
-    from: "john@company.com",
-    intent: "Corporate Events",
-    configuredEmail: "corporate@aivarevolution.com",
+    subject: "Table booking for Friday evening",
+    from: "sarah.j@email.com",
+    intent: "Restaurant Booking",
+    configuredEmail: "bookings@restaurant.com",
     status: "Pending Review",
     receivedAt: "2024-01-15 10:30 AM",
-    aiDraft: "Thank you for your interest in our corporate event services. We'd be happy to discuss your requirements and provide a customized solution...",
+    originalBody: "Hello, I'd like to book a table for 4 people this Friday at 8 PM. Could you confirm availability?",
+    aiDraft: "Hello Sarah,\nThank you for reaching out. We'd be delighted to host you this Friday at 8 PM for 4 guests. Could you please confirm if you prefer indoor or outdoor seating? Once confirmed, we'll reserve the table for you.",
   },
   {
     id: 2,
-    subject: "Technical Support Request",
-    from: "sarah@techcorp.com",
-    intent: "Technical Support",
-    configuredEmail: "support@aivarevolution.com",
+    subject: "Room availability for September 23–25",
+    from: "michael.lee@email.com",
+    intent: "Room Booking",
+    configuredEmail: "reservations@hotel.com",
     status: "Approved",
     receivedAt: "2024-01-15 09:15 AM",
-    aiDraft: "We've received your technical support request and our team is currently investigating the issue...",
+    originalBody: "Hi, I'm looking for a double room for two adults from September 23 to 25. Can you let me know if rooms are available and the rates?",
+    aiDraft: "Hi Michael,\nWe have double rooms available from September 23 to 25. The nightly rate is $180 including breakfast. Would you like us to hold the room under your name until you confirm the booking?",
   },
   {
     id: 3,
-    subject: "General Information",
-    from: "mike@startup.io",
-    intent: "General Inquiry",
-    configuredEmail: "info@aivarevolution.com",
+    subject: "Wedding hall for 250 guests",
+    from: "emily.carter@email.com",
+    intent: "Event Planning",
+    configuredEmail: "events@venue.com",
     status: "Sent",
     receivedAt: "2024-01-14 04:45 PM",
-    aiDraft: "Thank you for reaching out to AIVA. We're excited to help you with your AI assistant needs...",
+    originalBody: "Hello, I'd like information about booking your wedding hall for around 250 guests next spring. Could you send me capacity details and packages?",
+    aiDraft: "Hello Emily,\nThank you for considering us for your wedding. Our wedding hall can comfortably accommodate up to 300 guests. We offer packages that include catering, decoration, and event coordination. Would you like me to send our full wedding brochure for your review?",
   },
   {
     id: 4,
-    subject: "Billing Inquiry",
-    from: "finance@company.com",
-    intent: "Billing",
-    configuredEmail: "billing@aivarevolution.com",
+    subject: "Corporate event in November",
+    from: "david.w@email.com",
+    intent: "Corporate Events",
+    configuredEmail: "corporate@venue.com",
     status: "Pending Review",
     receivedAt: "2024-01-15 11:45 AM",
-    aiDraft: "Thank you for reaching out regarding your billing inquiry. Our finance team will review your request...",
+    originalBody: "Hi, we are planning a corporate training event for about 80 attendees in November. Could you share options for venue space and catering?",
+    aiDraft: "Hi David,\nWe'd be happy to host your corporate event. Our main conference hall can accommodate up to 100 attendees and we offer catering packages tailored to corporate functions. Could you please share your preferred dates in November so we can confirm availability?",
   },
   {
     id: 5,
-    subject: "Product Demo Request",
-    from: "sales@newcorp.com",
-    intent: "General Inquiry",
-    configuredEmail: "info@aivarevolution.com",
+    subject: "Birthday celebration booking",
+    from: "laura.b@email.com",
+    intent: "Private Events",
+    configuredEmail: "events@venue.com",
     status: "Unread",
     receivedAt: "2024-01-15 02:20 PM",
-    aiDraft: "We appreciate your interest in our AI solutions. Let's schedule a demo to showcase our capabilities...",
+    originalBody: "Hello, I'd like to book a private area for a birthday celebration on October 10 for around 30 guests. Do you have availability?",
+    aiDraft: "Hello Laura,\nYes, we can host your birthday celebration on October 10 for 30 guests. We also offer custom birthday packages including cake, décor, and entertainment. Would you like me to share the available packages with pricing?",
+  },
+  {
+    id: 6,
+    subject: "Gluten-free menu options",
+    from: "james.p@email.com",
+    intent: "General Inquiry",
+    configuredEmail: "info@restaurant.com",
+    status: "Pending Review",
+    receivedAt: "2024-01-15 01:15 PM",
+    originalBody: "Hi, do you have gluten-free menu options available for dinner service?",
+    aiDraft: "Hi James,\nYes, we do offer a variety of gluten-free dishes for dinner, including starters, mains, and desserts. Please let us know if you'd like me to send you the full gluten-free menu in advance.",
+  },
+  {
+    id: 7,
+    subject: "Cancel booking for Sept 18–19",
+    from: "rachel.a@email.com",
+    intent: "Cancellation",
+    configuredEmail: "reservations@hotel.com",
+    status: "Approved",
+    receivedAt: "2024-01-15 08:30 AM",
+    originalBody: "Hi, I need to cancel my room booking for September 18–19. Could you let me know the cancellation policy?",
+    aiDraft: "Hi Rachel,\nWe're sorry to hear you need to cancel. As per our policy, cancellations made at least 48 hours before check-in are eligible for a full refund. Since your booking is for September 18–19, you are within the refundable period. Would you like us to process the cancellation now?",
+  },
+  {
+    id: 8,
+    subject: "Group booking for 20 tourists",
+    from: "tom.r@email.com",
+    intent: "Group Booking",
+    configuredEmail: "groups@hotel.com",
+    status: "Sent",
+    receivedAt: "2024-01-14 03:45 PM",
+    originalBody: "Hello, I am arranging travel for a group of 20 tourists visiting on September 30. Do you have group packages available?",
+    aiDraft: "Hello Tom,\nYes, we offer special group packages including accommodation and dining discounts for groups of 15+ guests. We'd be glad to arrange for your group on September 30. Would you like me to send our group booking package details?",
+  },
+  {
+    id: 9,
+    subject: "Private dining for 8 guests",
+    from: "sophia.w@email.com",
+    intent: "Private Events",
+    configuredEmail: "dining@restaurant.com",
+    status: "Pending Review",
+    receivedAt: "2024-01-15 12:20 PM",
+    originalBody: "Hi, I'm looking for a private dining experience for 8 people next weekend. Could you share options and pricing?",
+    aiDraft: "Hi Sophia,\nWe have private dining rooms available for 6–10 guests. The package includes a 4-course set menu, personalized service, and a dedicated space. The cost starts at $95 per person. Would you like us to reserve a room for next weekend?",
+  },
+  {
+    id: 10,
+    subject: "Christmas Eve opening hours",
+    from: "oliver.g@email.com",
+    intent: "General Inquiry",
+    configuredEmail: "info@restaurant.com",
+    status: "Unread",
+    receivedAt: "2024-01-15 04:10 PM",
+    originalBody: "Hello, are you open on Christmas Eve and Christmas Day for dinner service?",
+    aiDraft: "Hello Oliver,\nYes, we are open on both Christmas Eve and Christmas Day with a special festive dinner menu. Reservations are recommended as these days book out quickly. Would you like me to hold a table for you?",
   },
 ];
 
 const mockIntentConfigs = [
-  { intent: "Corporate Events", email: "corporate@aivarevolution.com" },
-  { intent: "Technical Support", email: "support@aivarevolution.com" },
-  { intent: "General Inquiry", email: "info@aivarevolution.com" },
-  { intent: "Billing", email: "billing@aivarevolution.com" },
+  { intent: "Restaurant Booking", email: "bookings@restaurant.com" },
+  { intent: "Room Booking", email: "reservations@hotel.com" },
+  { intent: "Event Planning", email: "events@venue.com" },
+  { intent: "Corporate Events", email: "corporate@venue.com" },
+  { intent: "Private Events", email: "events@venue.com" },
+  { intent: "General Inquiry", email: "info@restaurant.com" },
+  { intent: "Cancellation", email: "reservations@hotel.com" },
+  { intent: "Group Booking", email: "groups@hotel.com" },
 ];
 
 const mockAutoReplies = [
@@ -180,7 +244,7 @@ const EmailViewDialog = ({ email }: { email: any }) => {
             <Label>Email Content</Label>
             <div className="p-4 bg-muted rounded-md">
               <p className="text-sm">
-                Hello, I would like to inquire about your services. Please provide more information about your offerings and pricing. Looking forward to hearing from you soon.
+                {email.originalBody || "No content available."}
               </p>
             </div>
           </div>
@@ -269,7 +333,7 @@ AIVA Support Team`;
             <div className="text-sm">
               <Label className="font-medium">Original Message:</Label>
               <p className="text-muted-foreground mt-1">
-                Hello, I would like to inquire about your services. Please provide more information about your offerings and pricing.
+                {email.originalBody || "No content available."}
               </p>
             </div>
           </div>
