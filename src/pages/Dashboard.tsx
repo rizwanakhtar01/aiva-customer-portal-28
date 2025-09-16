@@ -14,6 +14,7 @@ import { OfficeHoursChart } from "@/components/dashboard/OfficeHoursChart";
 import { SentimentChart } from "@/components/dashboard/SentimentChart";
 import { ConversionFunnelChart } from "@/components/dashboard/ConversionFunnelChart";
 import { ChannelDistributionChart } from "@/components/dashboard/ChannelDistributionChart";
+import { UnansweredQuestionsChart } from "@/components/dashboard/UnansweredQuestionsChart";
 import { 
   Users, 
   MessageSquare, 
@@ -430,6 +431,10 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SentimentChart dateRange={dateRange} />
           <ConversionFunnelChart dateRange={dateRange} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          <UnansweredQuestionsChart dateRange={dateRange} />
         </div>
       </div>
 
