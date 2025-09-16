@@ -12,12 +12,30 @@ import {
   BarChart3, 
   Shield,
   Zap,
-  Infinity
+  Mail,
+  Bot
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface PlanLimits {
+  conversations: number | "unlimited" | "setup";
+  users: number | "unlimited" | "setup";
+  integrations: number | "unlimited" | "setup";
+}
+
+interface Plan {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  limits: PlanLimits;
+  popular: boolean;
+}
+
 const Plans = () => {
-  const [currentPlan] = useState("pro");
+  const [currentPlan] = useState("webchat");
   const { toast } = useToast();
 
   const handleUpgrade = (planId: string) => {
@@ -27,67 +45,89 @@ const Plans = () => {
     });
   };
 
-  const plans = [
+  const plans: Plan[] = [
     {
-      id: "starter",
-      name: "Starter",
-      price: "$29",
-      period: "per month",
-      description: "Perfect for small businesses getting started",
+      id: "activation",
+      name: "Activation Setup",
+      price: "£995",
+      period: "one-off",
+      description: "Initial setup and activation of your AI customer portal",
       features: [
-        "Up to 1,000 conversations/month",
-        "Basic AI responses",
-        "Email support",
-        "Standard integrations",
-        "Basic analytics",
-        "1 user account"
+        "Complete system setup",
+        "AI configuration & training",
+        "Initial integrations setup",
+        "Custom branding setup",
+        "Staff training session",
+        "Technical support during setup"
       ],
       limits: {
-        conversations: 1000,
-        users: 1,
-        integrations: 2
+        conversations: "setup",
+        users: "setup",
+        integrations: "setup"
       },
       popular: false
     },
     {
-      id: "pro",
-      name: "Professional",
-      price: "$99",
+      id: "webchat",
+      name: "Web Chat & Visibility",
+      price: "£995",
       period: "per month",
-      description: "Ideal for growing businesses with higher volume",
+      description: "Complete web chat solution with visibility features",
       features: [
-        "Up to 10,000 conversations/month",
-        "Advanced AI with learning",
-        "Priority support",
-        "All integrations included",
-        "Advanced analytics & reporting",
-        "Up to 5 user accounts",
+        "Unlimited web chat conversations",
+        "AI-powered responses",
+        "Analytics & reporting",
+        "Search engine visibility tools",
         "Custom branding",
-        "API access"
+        "24/7 chat availability",
+        "Integration support",
+        "Priority customer support"
       ],
       limits: {
-        conversations: 10000,
-        users: 5,
+        conversations: "unlimited",
+        users: "unlimited",
         integrations: "unlimited"
       },
       popular: true
     },
     {
-      id: "enterprise",
-      name: "Enterprise",
-      price: "$299",
+      id: "email",
+      name: "Email Management",
+      price: "£1,195",
       period: "per month",
-      description: "For large organizations with custom needs",
+      description: "Advanced email automation and management system",
       features: [
-        "Unlimited conversations",
-        "Custom AI training",
-        "24/7 dedicated support",
-        "Custom integrations",
-        "White-label solution",
-        "Unlimited users",
-        "Advanced security features",
-        "SLA guarantee",
-        "Custom deployment options"
+        "Automated email responses",
+        "Email inbox management",
+        "AI-powered email drafting",
+        "Email analytics & tracking",
+        "Custom email templates",
+        "Integration with existing systems",
+        "Advanced workflow automation",
+        "Priority support"
+      ],
+      limits: {
+        conversations: "unlimited",
+        users: "unlimited",
+        integrations: "unlimited"
+      },
+      popular: false
+    },
+    {
+      id: "messenger",
+      name: "Messenger Integration",
+      price: "£495",
+      period: "per month",
+      description: "Social media messenger automation and management",
+      features: [
+        "Facebook Messenger integration",
+        "WhatsApp Business integration",
+        "Automated messaging responses",
+        "Multi-platform management",
+        "Message analytics",
+        "Custom automated workflows",
+        "Social media monitoring",
+        "Customer support"
       ],
       limits: {
         conversations: "unlimited",
@@ -144,7 +184,7 @@ const Plans = () => {
                   {usageData.conversations.toLocaleString()} / {
                     typeof currentPlanData?.limits.conversations === 'number' 
                       ? currentPlanData.limits.conversations.toLocaleString()
-                      : currentPlanData?.limits.conversations
+                      : (currentPlanData?.limits.conversations || "N/A")
                   }
                 </span>
               </div>
@@ -169,7 +209,7 @@ const Plans = () => {
                   {usageData.users} / {
                     typeof currentPlanData?.limits.users === 'number'
                       ? currentPlanData.limits.users
-                      : currentPlanData?.limits.users
+                      : (currentPlanData?.limits.users || "N/A")
                   }
                 </span>
               </div>
@@ -191,7 +231,7 @@ const Plans = () => {
                   <span className="text-sm font-medium">Integrations</span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {usageData.integrations} / {currentPlanData?.limits.integrations}
+                  {usageData.integrations} / {currentPlanData?.limits.integrations || "N/A"}
                 </span>
               </div>
               <Progress 
@@ -223,7 +263,7 @@ const Plans = () => {
       {/* Available Plans */}
       <div>
         <h2 className="text-2xl font-bold text-foreground mb-6">Available Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => (
             <Card 
               key={plan.id} 
@@ -241,9 +281,10 @@ const Plans = () => {
               
               <CardHeader className="text-center">
                 <CardTitle className="flex items-center justify-center gap-2">
-                  {plan.id === 'enterprise' && <Shield className="h-5 w-5" />}
-                  {plan.id === 'pro' && <Zap className="h-5 w-5" />}
-                  {plan.id === 'starter' && <Users className="h-5 w-5" />}
+                  {plan.id === 'activation' && <Shield className="h-5 w-5" />}
+                  {plan.id === 'webchat' && <MessageSquare className="h-5 w-5" />}
+                  {plan.id === 'email' && <Mail className="h-5 w-5" />}
+                  {plan.id === 'messenger' && <Bot className="h-5 w-5" />}
                   {plan.name}
                 </CardTitle>
                 <div className="space-y-2">
@@ -290,9 +331,9 @@ const Plans = () => {
         <CardContent>
           <div className="space-y-4">
             {[
-              { date: "Nov 15, 2024", amount: "$99.00", status: "Paid", plan: "Professional" },
-              { date: "Oct 15, 2024", amount: "$99.00", status: "Paid", plan: "Professional" },
-              { date: "Sep 15, 2024", amount: "$29.00", status: "Paid", plan: "Starter" },
+              { date: "Nov 15, 2024", amount: "£995.00", status: "Paid", plan: "Web Chat & Visibility" },
+              { date: "Oct 15, 2024", amount: "£995.00", status: "Paid", plan: "Web Chat & Visibility" },
+              { date: "Sep 15, 2024", amount: "£995.00", status: "Paid", plan: "Activation Setup" },
             ].map((transaction, index) => (
               <div key={index} className="flex items-center justify-between py-2">
                 <div>
